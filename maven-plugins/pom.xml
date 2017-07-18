@@ -16,7 +16,7 @@
     <version>2.0.3-SNAPSHOT</version>
     <packaging>pom</packaging>
 
-    <name>${project.version}</name>
+    <name>site:${project.version}</name>
 
     <description>
         A Maven plugin for dependency management and quality assurance in PHP projects. Uses

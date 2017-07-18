@@ -25,9 +25,6 @@ import org.codehaus.plexus.configuration.PlexusConfigurationException;
 import org.phpmaven.core.IComponentFactory;
 import org.phpmaven.phpunit.IPhpunitService;
 import org.phpmaven.phpunit.IPhpunitSupport;
-import org.sonatype.aether.util.version.GenericVersionScheme;
-import org.sonatype.aether.version.InvalidVersionSpecificationException;
-import org.sonatype.aether.version.Version;
 
 /**
  * Implementation of the default phpunit service.
@@ -41,22 +38,21 @@ public class PhpunitService implements IPhpunitService {
     /**
      * The version scheme.
      */
-    private static final GenericVersionScheme SCHEME = new GenericVersionScheme();
     
     /**
      * Version 3.3.10.
      */
-    private static Version v3310;
+    private static final VersionHelper v3310 = new VersionHelper("3.3.10");
     
     /**
      * Version 3.4.0.
      */
-    private static Version v340;
+    private static final VersionHelper v340 = new VersionHelper("3.4.0");
     
     /**
      * Version 3.6.0.
      */
-    private static Version v360;
+    private static VersionHelper v360 = new VersionHelper("3.6.0");
     
     /**
      * The component factory.
@@ -64,17 +60,6 @@ public class PhpunitService implements IPhpunitService {
     @Requirement
     private IComponentFactory factory;
     
-    static {
-        try {
-            v3310 = SCHEME.parseVersion("3.3.10");
-            v340 = SCHEME.parseVersion("3.4.0");
-            v360 = SCHEME.parseVersion("3.6.0");
-        } catch (InvalidVersionSpecificationException ex) {
-            // should never happen
-            ex.printStackTrace();
-        }
-    }
-
     /**
      * {@inheritDoc}
      */
@@ -108,37 +93,33 @@ public class PhpunitService implements IPhpunitService {
     public IPhpunitSupport createForPhpunitVersion(String version,
             MavenSession session) throws PlexusConfigurationException,
             ComponentLookupException {
-        try {
-            final Version mavenVer = SCHEME.parseVersion(version);
-            if (v3310.compareTo(mavenVer) > 0) {
-                return this.factory.lookup(
-                        IPhpunitSupport.class,
-                        "PHP_EXE_V3.3.9",
-                        IComponentFactory.EMPTY_CONFIG,
-                        session);
-            }
-            if (v340.compareTo(mavenVer) > 0) {
-                return this.factory.lookup(
-                        IPhpunitSupport.class,
-                        "PHP_EXE_V3.3.10",
-                        IComponentFactory.EMPTY_CONFIG,
-                        session);
-            }
-            if (v360.compareTo(mavenVer) > 0) {
-                return this.factory.lookup(
-                        IPhpunitSupport.class,
-                        "PHP_EXE_V3.4.0",
-                        IComponentFactory.EMPTY_CONFIG,
-                        session);
-            }
+        final VersionHelper mavenVer = new VersionHelper(version);
+        if (v3310.compareTo(mavenVer) > 0) {
             return this.factory.lookup(
                     IPhpunitSupport.class,
-                    "PHP_EXE_V3.6.0",
+                    "PHP_EXE_V3.3.9",
                     IComponentFactory.EMPTY_CONFIG,
                     session);
-        } catch (InvalidVersionSpecificationException ex) {
-            throw new PlexusConfigurationException("Invalid version for phpunit: " + version);
         }
+        if (v340.compareTo(mavenVer) > 0) {
+            return this.factory.lookup(
+                    IPhpunitSupport.class,
+                    "PHP_EXE_V3.3.10",
+                    IComponentFactory.EMPTY_CONFIG,
+                    session);
+        }
+        if (v360.compareTo(mavenVer) > 0) {
+            return this.factory.lookup(
+                    IPhpunitSupport.class,
+                    "PHP_EXE_V3.4.0",
+                    IComponentFactory.EMPTY_CONFIG,
+                    session);
+        }
+        return this.factory.lookup(
+                IPhpunitSupport.class,
+                "PHP_EXE_V3.6.0",
+                IComponentFactory.EMPTY_CONFIG,
+                session);
     }
 
 }

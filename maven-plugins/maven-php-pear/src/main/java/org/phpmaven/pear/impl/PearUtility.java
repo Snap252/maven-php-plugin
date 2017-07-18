@@ -53,8 +53,6 @@ import org.phpmaven.pear.IMavenPearUtility;
 import org.phpmaven.pear.library.impl.Version;
 import org.phpmaven.phpexec.library.PhpCoreException;
 import org.phpmaven.phpexec.library.PhpException;
-import org.sonatype.aether.util.version.GenericVersionScheme;
-import org.sonatype.aether.version.InvalidVersionSpecificationException;
 
 /**
  * Implementation of a pear utility via PHP.EXE and http-client.
@@ -65,9 +63,6 @@ import org.sonatype.aether.version.InvalidVersionSpecificationException;
 @Component(role = IMavenPearUtility.class, hint = "PHP_EXE", instantiationStrategy = "per-lookup")
 public class PearUtility  extends org.phpmaven.pear.library.impl.PearUtility implements IMavenPearUtility {
     
-    /** the generic version scheme. */
-    private static final GenericVersionScheme SCHEME = new GenericVersionScheme();
-
     /**
      * The component factory.
      */
@@ -168,10 +163,10 @@ public class PearUtility  extends org.phpmaven.pear.library.impl.PearUtility imp
                     deps.put(key, dep);
                 } else {
                     final org.sonatype.aether.graph.Dependency dep2 = deps.get(key);
-                    final org.sonatype.aether.version.Version ver =
-                        SCHEME.parseVersion(dep.getArtifact().getVersion());
-                    final org.sonatype.aether.version.Version ver2 =
-                        SCHEME.parseVersion(dep2.getArtifact().getVersion());
+                    final VersionHelper ver =
+                        new VersionHelper(dep.getArtifact().getVersion());
+                    final VersionHelper ver2 =
+                    		new VersionHelper(dep2.getArtifact().getVersion());
                     if (ver2.compareTo(ver) < 0) {
                         deps.put(key, dep);
                     }
@@ -219,8 +214,6 @@ public class PearUtility  extends org.phpmaven.pear.library.impl.PearUtility imp
             for (final File file : filesToInstall) {
                 this.executePearCmd("install --force --nodeps \"" + file.getAbsolutePath() + "\"");
             }
-        } catch (InvalidVersionSpecificationException ex) {
-            throw new PhpCoreException(ex);
         } catch (ProjectBuildingException ex) {
             throw new PhpCoreException(ex);
         } catch (DependencyResolutionException ex) {

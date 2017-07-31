@@ -115,9 +115,10 @@ public class PhpunitService implements IPhpunitService {
                     IComponentFactory.EMPTY_CONFIG,
                     session);
         }
+        
         return this.factory.lookup(
                 IPhpunitSupport.class,
-                "PHP_EXE_V3.6.0",
+                "PHP_EXE_VENDOR",
                 IComponentFactory.EMPTY_CONFIG,
                 session);
     }

@@ -44,7 +44,7 @@ import org.phpmaven.phpexec.library.PhpException;
  * @since 2.0.0
  */
 @Component(role = IPharPackager.class, hint = "PHP_EXE", instantiationStrategy = "per-lookup")
-@BuildPluginConfiguration(groupId = "org.phpmaven", artifactId = "php-maven-phar", filter = {
+@BuildPluginConfiguration(groupId = "org.phpmaven", artifactId = "maven-php-phar", filter = {
         "packager", "pharConfig" })
 public class PharPackager implements IPharPackager {
 

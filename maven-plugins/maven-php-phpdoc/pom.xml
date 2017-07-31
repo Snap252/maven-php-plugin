@@ -37,14 +37,29 @@
     
     <dependencies>
         <dependency>
-        	<groupId>org.phpmaven</groupId>
-        	<artifactId>maven-php-exec</artifactId>
-        	<version>${project.version}</version>
-        </dependency>
+		  <groupId>org.phpmaven.pear-java</groupId>
+		  <artifactId>pear-java-impl</artifactId>
+		  <version>0.1.1-SNAPSHOT</version>
+		</dependency>
         <dependency>
-        	<groupId>org.phpmaven</groupId>
-        	<artifactId>maven-php-pear</artifactId>
-        	<version>${project.version}</version>
+		  <groupId>org.phpmaven</groupId>
+		  <artifactId>maven-php-pear</artifactId>
+		 <version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.phpmaven</groupId>
+		    <artifactId>maven-php-exec</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		<dependency>
+			<groupId>org.phpmaven</groupId>
+    		<artifactId>maven-php-core</artifactId>
+			<version>${project.version}</version>
+		</dependency>
+		 <dependency>
+            <groupId>org.apache.maven</groupId>
+            <artifactId>maven-plugin-api</artifactId>
+            <version>3.0.4</version>
         </dependency>
     </dependencies>
   
